@@ -177,7 +177,7 @@ body{
 .omgeving-hero{
   flex:1;display:flex;flex-direction:column;
   align-items:center;justify-content:center;
-  padding:28px 28px 16px;position:relative;overflow:hidden;
+  padding:16px 28px 16px;position:relative;overflow:hidden;
 }
 .omgeving-hero::after{
   content:'';position:absolute;bottom:-40px;right:-40px;
@@ -319,6 +319,92 @@ body{
 .knop-niet .knop-label{color:#ef4444;}
 .knop-weet .knop-label{color:#9ca3af;}
 .knop-zicht .knop-label{color:#22c55e;}
+
+/* ══════════════════════════
+   CENTRALE SWIPE FEEDBACK
+══════════════════════════ */
+.swipe-feedback{
+  position:absolute;
+  top:50%;left:50%;
+  transform:translate(-50%,-50%) scale(0.8);
+  z-index:50;
+  pointer-events:none;
+  opacity:0;
+  transition:opacity .15s ease, transform .15s ease;
+  display:flex;flex-direction:column;align-items:center;gap:8px;
+}
+.swipe-feedback.zichtbaar-fb .fb-cirkel{background:rgba(22,163,74,.92);border-color:#16a34a;}
+.swipe-feedback.niet-fb .fb-cirkel{background:rgba(220,38,38,.92);border-color:#dc2626;}
+.swipe-feedback.weet-fb .fb-cirkel{background:rgba(100,116,139,.88);border-color:#64748b;}
+.fb-cirkel{
+  width:80px;height:80px;border-radius:50%;
+  border:3px solid;
+  display:flex;align-items:center;justify-content:center;
+  backdrop-filter:blur(4px);
+}
+.fb-cirkel svg{width:38px;height:38px;stroke:white;stroke-width:2.5;}
+.fb-label{
+  font-family:'Barlow Condensed',sans-serif;
+  font-size:14px;font-weight:800;letter-spacing:.08em;
+  text-transform:uppercase;color:white;
+  background:rgba(0,0,0,.45);
+  padding:4px 12px;border-radius:20px;
+  backdrop-filter:blur(4px);
+}
+.swipe-feedback.toon{opacity:1;transform:translate(-50%,-50%) scale(1);}
+
+/* ══════════════════════════
+   POP-UP MODAL
+══════════════════════════ */
+.popup-overlay{
+  position:absolute;inset:0;
+  background:rgba(0,0,0,.55);
+  display:flex;align-items:center;justify-content:center;
+  z-index:200;
+  opacity:0;pointer-events:none;
+  transition:opacity .25s ease;
+  padding:24px;
+}
+.popup-overlay.toon{opacity:1;pointer-events:all;}
+.popup-kaart{
+  background:white;
+  border-radius:var(--r);
+  padding:24px 22px 20px;
+  width:100%;max-width:340px;
+  transform:translateY(20px) scale(.96);
+  transition:transform .25s cubic-bezier(.34,1.56,.64,1);
+  box-shadow:0 20px 60px rgba(0,0,0,.25);
+}
+.popup-overlay.toon .popup-kaart{transform:translateY(0) scale(1);}
+.popup-icon{
+  width:48px;height:48px;border-radius:50%;
+  background:var(--blauw-light);
+  display:flex;align-items:center;justify-content:center;
+  margin:0 auto 14px;
+}
+.popup-icon svg{width:22px;height:22px;stroke:var(--blauw);stroke-width:2;fill:none;}
+.popup-titel{
+  font-family:'Barlow Condensed',sans-serif;
+  font-size:20px;font-weight:800;color:var(--tekst);
+  text-align:center;margin-bottom:8px;line-height:1.2;
+}
+.popup-tekst{
+  font-size:13px;color:var(--tekst-zacht);
+  text-align:center;line-height:1.6;margin-bottom:20px;
+}
+.popup-knoppen{display:flex;gap:10px;}
+.popup-btn{
+  flex:1;padding:13px;border:none;border-radius:12px;
+  font-family:'Barlow Condensed',sans-serif;
+  font-size:18px;font-weight:700;cursor:pointer;
+  transition:all .18s;
+}
+.popup-btn-nee{background:#ff6a13;color:white;}
+.popup-btn-nee:hover{background:#d95500;transform:translateY(-1px);}
+.popup-btn-nee:active{transform:scale(.97);}
+.popup-btn-ja{background:#006a8e;color:white;}
+.popup-btn-ja:hover{background:#004f6b;transform:translateY(-1px);}
+.popup-btn-ja:active{transform:scale(.97);}
 
 /* ══════════════════════════
    SCHERM 5 — RESULTAAT
@@ -464,10 +550,10 @@ body{
     <p class="start-sub">Een tool om signalen van ondermijning bij jongeren scherp te krijgen en te beoordelen.</p>
   </div>
   <div class="start-bottom">
-        <button class="grote-btn" onclick="naarScherm('instructie')">Aan de slag →</button>
-        <p class="versie-tag">Scherp Signaal · V4.0</p>
-        <p class="versie-tag">Dit is een product van Scherp in Veiligheid.<br>
-        <a href="https://www.scherpinveiligheid.nl" target="_blank" style="color:#ff6a13;">www.scherpinveiligheid.nl</a></p>
+    <button class="grote-btn" onclick="naarScherm('instructie')">Aan de slag →</button>
+    <p class="versie-tag">Scherp Signaal · V4.1</p>
+    <p class="versie-tag">Dit is een product van Scherp in Veiligheid.<br>
+    <a href="https://www.scherpinveiligheid.nl" target="_blank" style="color:#ff6a13;">www.scherpinveiligheid.nl</a></p>
   </div>
 </div>
 
@@ -522,8 +608,11 @@ body{
 ══════════════════════════ -->
 <div id="s-omgeving" class="screen">
   <div class="omgeving-hero">
+    <div style="display:flex;align-items:center;gap:12px;width:100%;margin-bottom:20px;">
+      <button class="terug-btn" onclick="naarScherm('instructie')">←</button>
+    </div>
     <div class="omgeving-hero-titel">Kies je<br><em>type locatie</em></div>
-    <p class="omgeving-hero-sub">Waar spelen de signalen die je wilt beoordelen zich af?</p>
+    <p class="omgeving-hero-sub">Waar spelen de signalen zich af?</p>
   </div>
   <div class="omgeving-kaart">
     <p class="sectie-label">Selecteer een locatie</p>
@@ -577,11 +666,17 @@ body{
 ══════════════════════════ -->
 <div id="s-spel" class="screen">
   <div class="spel-header">
-    <button class="terug-btn" onclick="volledigeReset()">←</button>
+    <button class="terug-btn" onclick="toonPopup('terug')" title="Terug naar locatiekeuze">←</button>
     <div class="header-midden">
       <div class="header-omgeving" id="hdr-omgeving">Op straat</div>
       <div class="header-teller" id="hdr-teller">Signaal 1 van 24</div>
     </div>
+    <button class="terug-btn" onclick="toonPopup('home')" title="Terug naar beginscherm">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
+        <polyline points="9 22 9 12 15 12 15 22"/>
+      </svg>
+    </button>
   </div>
   <div class="voortgang-balk">
     <div class="voortgang-fill" id="voortgang" style="width:0%"></div>
@@ -600,6 +695,13 @@ body{
           <div class="kaart-vraag"><p>Is dit signaal zichtbaar in deze situatie?</p></div>
         </div>
       </div>
+    </div>
+    <!-- Centrale swipe feedback overlay -->
+    <div class="swipe-feedback" id="swipe-feedback">
+      <div class="fb-cirkel" id="fb-cirkel">
+        <svg id="fb-icoon" viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round"></svg>
+      </div>
+      <div class="fb-label" id="fb-label"></div>
     </div>
   </div>
   <div class="knoppen-balk">
@@ -626,6 +728,36 @@ body{
         </div>
         <span class="knop-label">Zichtbaar</span>
       </button>
+    </div>
+  </div>
+
+  <!-- Popup: terug naar locatiekeuze -->
+  <div class="popup-overlay" id="popup-terug">
+    <div class="popup-kaart">
+      <div class="popup-icon">
+        <svg viewBox="0 0 24 24"><path d="M19 12H5M12 5l-7 7 7 7"/></svg>
+      </div>
+      <div class="popup-titel">Terug naar locatiekeuze</div>
+      <div class="popup-tekst">Je gaat terug naar de locatiekeuze. De huidige beoordeling wordt afgebroken en alle ingevoerde signalen worden gewist. Weet je het zeker?</div>
+      <div class="popup-knoppen">
+        <button class="popup-btn popup-btn-nee" onclick="sluitPopup('terug')">Nee</button>
+        <button class="popup-btn popup-btn-ja" onclick="bevestigTerug()">Ja</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Popup: terug naar beginscherm (home) -->
+  <div class="popup-overlay" id="popup-home">
+    <div class="popup-kaart">
+      <div class="popup-icon">
+        <svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+      </div>
+      <div class="popup-titel">Beoordeling afsluiten</div>
+      <div class="popup-tekst">Je sluit de huidige Scherp Signaal beoordeling af. Alle ingevoerde signalen worden gewist en je keert terug naar het beginscherm. Weet je het zeker?</div>
+      <div class="popup-knoppen">
+        <button class="popup-btn popup-btn-nee" onclick="sluitPopup('home')">Nee</button>
+        <button class="popup-btn popup-btn-ja" onclick="bevestigHome()">Ja</button>
+      </div>
     </div>
   </div>
 </div>
@@ -935,12 +1067,70 @@ function laadKaart() {
 }
 
 /* ══════════════════════════════
+   POPUP FUNCTIES
+══════════════════════════════ */
+function toonPopup(type) {
+  document.getElementById('popup-' + type).classList.add('toon');
+}
+function sluitPopup(type) {
+  document.getElementById('popup-' + type).classList.remove('toon');
+}
+function bevestigTerug() {
+  sluitPopup('terug');
+  volledigeReset();
+  naarScherm('omgeving');
+}
+function bevestigHome() {
+  sluitPopup('home');
+  volledigeReset();
+}
+
+/* ══════════════════════════════
+   CENTRALE SWIPE FEEDBACK
+══════════════════════════════ */
+let feedbackTimer = null;
+function toonFeedback(keuze) {
+  const fb = document.getElementById('swipe-feedback');
+  const cirkel = document.getElementById('fb-cirkel');
+  const icoon = document.getElementById('fb-icoon');
+  const label = document.getElementById('fb-label');
+
+  fb.classList.remove('zichtbaar-fb','niet-fb','weet-fb','toon');
+
+  if (keuze === 'zichtbaar') {
+    fb.classList.add('zichtbaar-fb');
+    icoon.innerHTML = '<polyline points="20 6 9 17 4 12" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>';
+    label.textContent = 'Zichtbaar';
+  } else if (keuze === 'niet') {
+    fb.classList.add('niet-fb');
+    icoon.innerHTML = '<line x1="18" y1="6" x2="6" y2="18" stroke="white" stroke-width="2.5" stroke-linecap="round"/><line x1="6" y1="6" x2="18" y2="18" stroke="white" stroke-width="2.5" stroke-linecap="round"/>';
+    label.textContent = 'Niet zichtbaar';
+  } else {
+    fb.classList.add('weet-fb');
+    icoon.innerHTML = '<circle cx="12" cy="12" r="10" stroke="white" stroke-width="2.5"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3" stroke="white" stroke-width="2.5" stroke-linecap="round"/><line x1="12" y1="17" x2="12.01" y2="17" stroke="white" stroke-width="2.5" stroke-linecap="round"/>';
+    label.textContent = 'Weet ik niet';
+  }
+
+  // Force reflow voor animatie
+  void fb.offsetWidth;
+  fb.classList.add('toon');
+
+  if (feedbackTimer) clearTimeout(feedbackTimer);
+  feedbackTimer = setTimeout(() => {
+    fb.classList.remove('toon');
+  }, 620);
+}
+
+/* ══════════════════════════════
    ANTWOORD VERWERKEN
 ══════════════════════════════ */
 function verwerkAntwoord(keuze) {
   if (verwerkBezig) return;
   verwerkBezig = true;
   antwoorden.push({signaal: actieveSignalen[kaartIndex], keuze});
+
+  // Toon centrale feedback overlay
+  toonFeedback(keuze);
 
   const k = document.getElementById('huidige-kaart');
   k.style.transition = 'transform .38s cubic-bezier(.25,.46,.45,.94), opacity .38s ease';
@@ -1017,9 +1207,9 @@ function berekenRisico() {
 
   let risico;
   if      (punten >= 45) risico = 'extreem_hoog';
-  else if (punten >= 15) risico = 'hoog';
-  else if (punten >= 5)  risico = 'gemiddeld';
-  else if (punten >= 3)  risico = 'laag';
+  else if (punten >= 17) risico = 'hoog';
+  else if (punten >= 8)  risico = 'gemiddeld';
+  else if (punten >= 4)  risico = 'laag';
   else                   risico = 'verwaarloosbaar';
 
   return {risico, nLaag, nGem, nHoog, punten};
