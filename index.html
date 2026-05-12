@@ -571,7 +571,7 @@ body{
       <div class="instructie-intro-tekst">Gebruik Scherp Signaal op het moment dat je onderbuikgevoel zegt: hier klopt iets niet. Je ziet, hoort of merkt iets bij een jongere dat afwijkt, maar je kunt de situatie niet duiden. Of het nu uiteindelijk gaat om een onschuldige situatie of meerdere ernstige signalen, de app helpt om je waarnemingen scherp te krijgen. Twijfel je over de situatie? Dan is dit hét moment om Scherp Signaal te gebruiken.</div>
     </div>
 
-    <div class="instructie-sectie-titel">Wat kun je verwachten?</div>
+    <div class="instructie-sectie-titel">Hoe werkt Scherp Signaal?</div>
 
     <div class="stap-kaart">
       <div class="stap-nummer">1</div>
@@ -671,12 +671,21 @@ body{
       <div class="header-omgeving" id="hdr-omgeving">Op straat</div>
       <div class="header-teller" id="hdr-teller">Signaal 1 van 24</div>
     </div>
-    <button class="terug-btn" onclick="toonPopup('home')" title="Terug naar beginscherm">
-      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-        <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
-        <polyline points="9 22 9 12 15 12 15 22"/>
-      </svg>
-    </button>
+    <div style="display:flex;gap:8px;">
+      <button class="terug-btn" onclick="toonPopup('info')" title="Hoe werkt Scherp Signaal?">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="10"/>
+          <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/>
+          <line x1="12" y1="17" x2="12.01" y2="17"/>
+        </svg>
+      </button>
+      <button class="terug-btn" onclick="toonPopup('home')" title="Terug naar beginscherm">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
+          <polyline points="9 22 9 12 15 12 15 22"/>
+        </svg>
+      </button>
+    </div>
   </div>
   <div class="voortgang-balk">
     <div class="voortgang-fill" id="voortgang" style="width:0%"></div>
@@ -757,6 +766,44 @@ body{
       <div class="popup-knoppen">
         <button class="popup-btn popup-btn-nee" onclick="sluitPopup('home')">Nee</button>
         <button class="popup-btn popup-btn-ja" onclick="bevestigHome()">Ja</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Popup: info / hoe werkt het -->
+  <div class="popup-overlay" id="popup-info" style="align-items:flex-end;padding:0;">
+    <div class="popup-kaart" style="max-width:100%;border-radius:24px 24px 0 0;padding:0;max-height:80vh;display:flex;flex-direction:column;">
+      <div style="background:var(--blauw);padding:16px 18px;border-radius:24px 24px 0 0;display:flex;align-items:center;justify-content:space-between;flex-shrink:0;">
+        <div style="font-family:'Barlow Condensed',sans-serif;font-size:19px;font-weight:700;color:white;">Hoe werkt Scherp Signaal?</div>
+        <button onclick="sluitPopup('info')" style="width:32px;height:32px;border-radius:8px;background:rgba(255,255,255,.15);border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;color:white;font-size:16px;transition:background .15s;" onmouseover="this.style.background='rgba(255,255,255,.25)'" onmouseout="this.style.background='rgba(255,255,255,.15)'">✕</button>
+      </div>
+      <div style="overflow-y:auto;-webkit-overflow-scrolling:touch;padding:20px 18px 28px;background:var(--grijs-licht);">
+        <div style="background:white;border-radius:14px;padding:16px 18px;margin-bottom:16px;border-left:4px solid var(--oranje);">
+          <div style="font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--oranje);margin-bottom:8px;">Wanneer gebruik je Scherp Signaal?</div>
+          <div style="font-size:13px;color:var(--tekst);line-height:1.7;">Gebruik Scherp Signaal op het moment dat je onderbuikgevoel zegt: hier klopt iets niet. Je ziet, hoort of merkt iets bij een jongere dat afwijkt, maar je kunt de situatie niet duiden. Of het nu uiteindelijk gaat om een onschuldige situatie of meerdere ernstige signalen, de app helpt om je waarnemingen scherp te krijgen. Twijfel je over de situatie? Dan is dit hét moment om Scherp Signaal te gebruiken.</div>
+        </div>
+        <div style="font-family:'Barlow Condensed',sans-serif;font-size:17px;font-weight:700;color:var(--blauw);margin-bottom:12px;">Hoe werkt Scherp Signaal?</div>
+        <div style="background:white;border-radius:14px;padding:14px 16px;margin-bottom:10px;display:flex;gap:12px;align-items:flex-start;">
+          <div style="width:32px;height:32px;border-radius:50%;background:var(--blauw);color:white;display:flex;align-items:center;justify-content:center;font-family:'Barlow Condensed',sans-serif;font-size:16px;font-weight:800;flex-shrink:0;">1</div>
+          <div>
+            <div style="font-family:'Barlow Condensed',sans-serif;font-size:16px;font-weight:700;color:var(--tekst);margin-bottom:4px;">Signalen benoemen</div>
+            <div style="font-size:13px;color:#374151;line-height:1.6;">Je swipet een signaal naar links als het niet zichtbaar is, en naar rechts als het wel zichtbaar is. Weet je het niet zeker? Druk dan op <strong>Weet ik niet</strong>.</div>
+          </div>
+        </div>
+        <div style="background:white;border-radius:14px;padding:14px 16px;margin-bottom:10px;display:flex;gap:12px;align-items:flex-start;">
+          <div style="width:32px;height:32px;border-radius:50%;background:var(--blauw);color:white;display:flex;align-items:center;justify-content:center;font-family:'Barlow Condensed',sans-serif;font-size:16px;font-weight:800;flex-shrink:0;">2</div>
+          <div>
+            <div style="font-family:'Barlow Condensed',sans-serif;font-size:16px;font-weight:700;color:var(--tekst);margin-bottom:4px;">Risicobeoordeling</div>
+            <div style="font-size:13px;color:#374151;line-height:1.6;">Op basis van jouw ingevoerde signalen wordt een risicobeoordeling gegeven met één van de volgende opties: verwaarloosbaar, laag, gemiddeld, hoog of extreem hoog risico.</div>
+          </div>
+        </div>
+        <div style="background:white;border-radius:14px;padding:14px 16px;display:flex;gap:12px;align-items:flex-start;">
+          <div style="width:32px;height:32px;border-radius:50%;background:var(--blauw);color:white;display:flex;align-items:center;justify-content:center;font-family:'Barlow Condensed',sans-serif;font-size:16px;font-weight:800;flex-shrink:0;">3</div>
+          <div>
+            <div style="font-family:'Barlow Condensed',sans-serif;font-size:16px;font-weight:700;color:var(--tekst);margin-bottom:4px;">Advies en opvolging</div>
+            <div style="font-size:13px;color:#374151;line-height:1.6;">Op basis van de risicobeoordeling krijg je een passend advies met eventuele vervolgstappen.</div>
+          </div>
+        </div>
       </div>
     </div>
   </div>
