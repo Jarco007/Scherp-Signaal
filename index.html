@@ -551,7 +551,7 @@ body{
   </div>
   <div class="start-bottom">
     <button class="grote-btn" onclick="naarScherm('instructie')">Aan de slag →</button>
-    <p class="versie-tag">Scherp Signaal · V4.1</p>
+    <p class="versie-tag">Scherp Signaal · V4.2</p>
     <p class="versie-tag">Dit is een product van Scherp in Veiligheid.<br>
     <a href="https://www.scherpinveiligheid.nl" target="_blank" style="color:#ff6a13;">www.scherpinveiligheid.nl</a></p>
   </div>
@@ -716,6 +716,7 @@ body{
   <div class="knoppen-balk">
     <div class="swipe-hint">
       <span>← Niet zichtbaar</span>
+      <span>↑ Weet ik niet</span>
       <span>Zichtbaar →</span>
     </div>
     <div class="drie-knoppen">
@@ -1017,7 +1018,7 @@ let omgeving = null;
 let actieveSignalen = [];
 let kaartIndex = 0;
 let antwoorden = [];
-let isDragging = false, startX = 0, currX = 0;
+let isDragging = false, startX = 0, startY = 0, currX = 0, currY = 0;
 let verwerkBezig = false;
 
 /* ══════════════════════════════
@@ -1200,27 +1201,44 @@ function setupSwipe() {
   const k = document.getElementById('huidige-kaart');
   const nieuw = k.cloneNode(true);
   k.parentNode.replaceChild(nieuw, k);
-  nieuw.addEventListener('mousedown', e => { isDragging=true; startX=e.clientX; currX=0; document.addEventListener('mousemove',onMove); document.addEventListener('mouseup',onUp); });
-  nieuw.addEventListener('touchstart', e => { isDragging=true; startX=e.touches[0].clientX; currX=0; document.addEventListener('touchmove',onMoveT,{passive:true}); document.addEventListener('touchend',onUpT); },{passive:true});
+  nieuw.addEventListener('mousedown', e => { isDragging=true; startX=e.clientX; startY=e.clientY; currX=0; currY=0; document.addEventListener('mousemove',onMove); document.addEventListener('mouseup',onUp); });
+  nieuw.addEventListener('touchstart', e => { isDragging=true; startX=e.touches[0].clientX; startY=e.touches[0].clientY; currX=0; currY=0; document.addEventListener('touchmove',onMoveT,{passive:true}); document.addEventListener('touchend',onUpT); },{passive:true});
 }
-function onMove(e){if(!isDragging)return;currX=e.clientX-startX;beweeg(currX);}
-function onMoveT(e){if(!isDragging)return;currX=e.touches[0].clientX-startX;beweeg(currX);}
-function onUp(){document.removeEventListener('mousemove',onMove);document.removeEventListener('mouseup',onUp);if(isDragging){isDragging=false;eindeSwipe(currX);}}
-function onUpT(){document.removeEventListener('touchmove',onMoveT);document.removeEventListener('touchend',onUpT);if(isDragging){isDragging=false;eindeSwipe(currX);}}
-function beweeg(dx){
+function onMove(e){if(!isDragging)return;currX=e.clientX-startX;currY=e.clientY-startY;beweeg(currX,currY);}
+function onMoveT(e){if(!isDragging)return;currX=e.touches[0].clientX-startX;currY=e.touches[0].clientY-startY;beweeg(currX,currY);}
+function onUp(){document.removeEventListener('mousemove',onMove);document.removeEventListener('mouseup',onUp);if(isDragging){isDragging=false;eindeSwipe(currX,currY);}}
+function onUpT(){document.removeEventListener('touchmove',onMoveT);document.removeEventListener('touchend',onUpT);if(isDragging){isDragging=false;eindeSwipe(currX,currY);}}
+
+function beweeg(dx,dy){
   if(verwerkBezig)return;
   const k=document.getElementById('huidige-kaart');if(!k)return;
-  k.style.transform=`translateX(${dx}px) rotate(${dx*0.07}deg)`;
-  const dr=55,oja=document.getElementById('ov-ja'),onee=document.getElementById('ov-nee');
-  if(!oja||!onee)return;
-  if(dx>dr){oja.style.opacity=Math.min((dx-dr)/70,1);onee.style.opacity='0';}
-  else if(dx<-dr){onee.style.opacity=Math.min((-dx-dr)/70,1);oja.style.opacity='0';}
-  else{oja.style.opacity='0';onee.style.opacity='0';}
+
+  // Bepaal dominante richting
+  const isOmhoog = dy < -40 && Math.abs(dy) > Math.abs(dx) * 0.8;
+
+  if(isOmhoog){
+    // Omhoog bewegen: kaart schuift omhoog, geen rotatie
+    k.style.transform=`translateY(${dy}px) scale(${Math.max(0.92, 1 + dy/800)})`;
+    document.getElementById('ov-ja').style.opacity='0';
+    document.getElementById('ov-nee').style.opacity='0';
+  } else {
+    // Links/rechts bewegen
+    const rot=dx*0.07;
+    k.style.transform=`translateX(${dx}px) rotate(${rot}deg)`;
+    const dr=55,oja=document.getElementById('ov-ja'),onee=document.getElementById('ov-nee');
+    if(!oja||!onee)return;
+    if(dx>dr){oja.style.opacity=Math.min((dx-dr)/70,1);onee.style.opacity='0';}
+    else if(dx<-dr){onee.style.opacity=Math.min((-dx-dr)/70,1);oja.style.opacity='0';}
+    else{oja.style.opacity='0';onee.style.opacity='0';}
+  }
 }
-function eindeSwipe(dx){
+
+function eindeSwipe(dx,dy){
   if(verwerkBezig)return;
-  if(dx>100)verwerkAntwoord('zichtbaar');
-  else if(dx<-100)verwerkAntwoord('niet');
+  const isOmhoog = dy < -80 && Math.abs(dy) > Math.abs(dx) * 0.8;
+  if(isOmhoog) verwerkAntwoord('weet');
+  else if(dx>100) verwerkAntwoord('zichtbaar');
+  else if(dx<-100) verwerkAntwoord('niet');
   else{
     const k=document.getElementById('huidige-kaart');if(!k)return;
     k.style.transition='transform .32s cubic-bezier(.34,1.56,.64,1)';
