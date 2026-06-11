@@ -1,0 +1,25 @@
+{
+  "name": "Scherp Signaal",
+  "short_name": "Scherp Signaal",
+  "description": "Een tool om signalen van ondermijning bij jongeren scherp te krijgen en te beoordelen.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#006a8e",
+  "theme_color": "#006a8e",
+  "orientation": "portrait",
+  "lang": "nl",
+  "icons": [
+    {
+      "src": "icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}
